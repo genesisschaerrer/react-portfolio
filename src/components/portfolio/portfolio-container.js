@@ -1,3 +1,4 @@
+import { data } from "autoprefixer"
 import React, { Component } from "react"
 
 
@@ -10,14 +11,22 @@ export default class PorfolioContainer extends Component{
         this.state = {
             pageTitle: "Welcome to my portfolio",
             data: [
-                {title:'Washington County School District'},
-                {title:'Autism Solutions'},
-                {title:'Dixie State University'},
-                {title:'Enact Teamworks'}
+                {title:'Washington County School District', category: "Education"},
+                {title:'Autism Solutions', category: "Education"},
+                {title:'Dixie State University', category: "Higher Education"},
+                {title:'Enact Teamworks', category: "Digital Marketing"}
             ]
         }
 
-        this.handlePageTitleUpdate = this.handlePageTitleUpdate.bind(this)
+        this.handleFilter = this.handleFilter.bind(this)
+    }
+
+    handleFilter (filter) {
+        this.setState({
+            data: this.state.data.filter(i => {
+                return i.category === filter
+            })
+        })
     }
 
     PortfolioItems() {
@@ -37,10 +46,11 @@ export default class PorfolioContainer extends Component{
             <div>
                 <h2>{this.state.pageTitle}</h2>
 
-                {this.PortfolioItems()}
+                   <button onClick={()=> this.handleFilter('Education')}>Education</button> 
+                   <button onClick={()=> this.handleFilter('Higher Education')}>Higher Education</button>  
+                   <button onClick={()=> this.handleFilter('Digital Marketing')}>Digital Marketing</button>    
 
-                <hr></hr>
-                   <button onClick={this.handlePageTitleUpdate}></button>         
+                   {this.PortfolioItems()}      
             </div>  
         )
     }
