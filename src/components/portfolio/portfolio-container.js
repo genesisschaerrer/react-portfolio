@@ -12,10 +12,10 @@ export default class PorfolioContainer extends Component{
             pageTitle: "Welcome to my portfolio",
             isLoading: false,
             data: [
-                {title:'Washington County School District', category: "Education"},
-                {title:'Autism Solutions', category: "Education"},
-                {title:'Dixie State University', category: "Higher Education"},
-                {title:'Enact Teamworks', category: "Digital Marketing"}
+                {title:'Washington County School District', category: "Education", slug: 'Washington-County-School-District'},
+                {title:'Autism Solutions', category: "Education", slug: 'Austims-Solutions'},
+                {title:'Dixie State University', category: "Higher Education", slug: "Dixie-State-University"},
+                {title:'Enact Teamworks', category: "Digital Marketing", slug: "Enact-Teamworks"}
             ]
         }
 
@@ -32,7 +32,7 @@ export default class PorfolioContainer extends Component{
 
     PortfolioItems() {
         return this.state.data.map(item => {
-            return <PortfolioItem title={item.title} url={item.title}/>
+            return <PortfolioItem title={item.title} url={item.title} slug={item.slug}/>
         })
     }
 
