@@ -1,4 +1,5 @@
 import { data } from "autoprefixer"
+import axios from "axios"
 import React, { Component } from "react"
 
 
@@ -11,12 +12,7 @@ export default class PorfolioContainer extends Component{
         this.state = {
             pageTitle: "Welcome to my portfolio",
             isLoading: false,
-            data: [
-                {title:'Washington County School District', category: "Education", slug: 'Washington-County-School-District'},
-                {title:'Autism Solutions', category: "Education", slug: 'Austims-Solutions'},
-                {title:'Dixie State University', category: "Higher Education", slug: "Dixie-State-University"},
-                {title:'Enact Teamworks', category: "Digital Marketing", slug: "Enact-Teamworks"}
-            ]
+            data: []
         }
 
         this.handleFilter = this.handleFilter.bind(this)
@@ -30,9 +26,40 @@ export default class PorfolioContainer extends Component{
         })
     }
 
+    getPortoflioItems = () => {
+        const axios = require('axios');
+    
+        // Make a request for a user with a given ID
+        axios.get('https://genesisschaerrer.devcamp.space/portfolio/portfolio_items')
+        .then(response => {
+        // handle success
+        this.setState({
+            data: response.data.portfolio_items
+        })
+        })
+        .catch(error => {
+        // handle error
+        console.log(error);
+        })
+        .then(() => {
+        // always executed
+        console.log('default function')
+        });
+      }
+
     PortfolioItems() {
+        //Data that we'll need:
+        //-background image: thumb_image_ur;
+        //-log
+        //-description: description
+        //-id: id
+        //in console you can see all the keys of an object by calling Object.keys(object name)
+        //["id", "name", "description", "url", "category", "position", "thumb_image_url", "banner_image_url", "logo_url", "column_names_merged_with_images"]
         return this.state.data.map(item => {
-            return <PortfolioItem title={item.title} url={item.title} slug={item.slug}/>
+            //debugger
+            return <PortfolioItem 
+            key={item.id} 
+            item={item}/>
         })
     }
 
@@ -40,6 +67,10 @@ export default class PorfolioContainer extends Component{
         this.setState({
             pageTitle: "Something Else"
         })
+    }
+
+    componentDidMount(){
+        this.getPortoflioItems()
     }
 
     render() {
