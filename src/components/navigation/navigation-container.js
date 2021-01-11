@@ -1,18 +1,32 @@
-import React, { Component } from "react"
+import React from "react"
+import axios from "axios"
+import { withRouter} from "react-router"
 import {NavLink} from "react-router-dom"
 
 
 
-class NavigationContainer extends Component {
-    constructor () {
-        super ()
+const NavigationComponent = props => {
+
+    const dynamicLink = (route, linkText) => {
+      return(
+        <div className="nav-link-wrapper">
+            <NavLink to={route} activeClassName="nav-link-active">{linkText}</NavLink>
+        </div>
+      )     
     }
 
-    adminLinks () {
-
+    const handleSignOut = () => {
+        axios.delete("https://api.devcamp.space/logout", {withCredentials: true})
+        .then(response => {
+            if(response.status === 200){
+                props.history.push("/")
+                props.handleUnSuccessfulLogout()
+            }
+            return response.data
+        })
+        .catch(err => console.log("error loggin out", err))
     }
 
-    render(){
         return (
             <div className="nav-wrapper">
                 <div className="left-side">
@@ -28,14 +42,15 @@ class NavigationContainer extends Component {
                     <div className="nav-link-wrapper">
                         <NavLink to="/blog" activeClassName="nav-link-active">Blog</NavLink>
                     </div>
+                
+                    {props.loggedInStatus === "LOGGED_IN" ? dynamicLink("/portfolio-manager", "Portfolio Manager"): null}
                 </div>
-
                 <div className="right-side">
                     GENESIS SCHAERRER
-                </div>
+                    {props.loggedInStatus === "LOGGED_IN" ? <a onClick={handleSignOut}>Log Out</a>: null}
+                </div>  
             </div>
         )
-    }
 }
 
-export default NavigationContainer
+export default withRouter(NavigationComponent)
