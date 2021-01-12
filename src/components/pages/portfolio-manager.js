@@ -16,7 +16,13 @@ export default class PortfolioManager extends Component{
         
     }
 
-    handleEditClick(portfolioItem){
+    clearPortfolioToEdit = () => {
+        this.setState({
+            portfolioToEdit: {}
+        })
+    }
+
+    handleEditClick = (portfolioItem) => {
         this.setState({
             portfolioToEdit: portfolioItem
         })
@@ -70,6 +76,8 @@ export default class PortfolioManager extends Component{
                     <PortfolioForm 
                     handleSuccessfulFormSubmission={this.handleSuccessfulFormSubmission}
                     handleFormSubmissionError={this.handleFormSubmissionError}
+                    clearPortfolioToEdit={this.clearPortfolioToEdit}
+                    portfolioToEdit={this.state.portfolioToEdit}
                     />
                 </div>
 
