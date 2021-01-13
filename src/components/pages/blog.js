@@ -13,16 +13,17 @@ class Blog extends Component {
       isLoading: true,
     };
     this.getBlogItems = this.getBlogItems.bind(this);
-    this.activateInfiniteScroll();
+    this.onScroll = this.onScroll.bind(this)
+    window.addEventListener("scroll", this.onScroll)
   }
 
-  activateInfiniteScroll() {
-    window.onscroll = () => {
+    onScroll() {
       if (
         this.state.isLoading ||
         this.state.blogItems.length === this.state.totalCount
       ) { return;
       }
+
 
       if (
         Math.ceil(window.innerHeight + document.documentElement.scrollTop) ===
@@ -32,7 +33,7 @@ class Blog extends Component {
         // console.log("get more posts");
       }
     };
-  }
+  
 
   getBlogItems() {
     this.setState({
@@ -59,8 +60,12 @@ class Blog extends Component {
       });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getBlogItems();
+  }
+
+  componentWillUnmount(){
+      window.removeEventListener("scroll", this.onScroll)
   }
 
   render() {
