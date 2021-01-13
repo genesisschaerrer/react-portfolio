@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import {Link} from "react-router-dom"
 import axios from "axios"
 import BlogItem from "../blog/blog-item"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 
 
@@ -10,7 +11,10 @@ export default class Blog extends Component{
         super()
 
         this.state = {
-            blogItems: []
+            blogItems: [],
+            totalCount: 0,
+            currentPage: 0, 
+            isLoading: true
         }
 
         this.activateInfiniteScroll()
@@ -26,12 +30,18 @@ export default class Blog extends Component{
     }
 
     getBlogItems(){
+        this.setState({
+            currentPage: this.state.currentPage + 1
+        })
+
         axios
         .get("https://genesisschaerrer.devcamp.space/portfolio/portfolio_blogs",
          {withCredentials: true})
          .then(response => {
              this.setState({
-                 blogItems: response.data.portfolio_blogs
+                 blogItems: response.data.portfolio_blogs,
+                 totalCount: response.data.meta.total_records,
+                 isLoading: false
              })
          })
          .catch(error => {
@@ -52,6 +62,12 @@ export default class Blog extends Component{
     return (
         <div className="blog-container">
             <div className="content-container">{blogRecords}</div>
+
+            {this.state.isLoading? (
+            <div className="content-loader">
+                <FontAwesomeIcon icon="spinner" spin/>
+            </div>)
+            : null}
         </div>
     )}
 }
