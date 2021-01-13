@@ -39,8 +39,8 @@ export default class Blog extends Component{
         })
 
     return (
-    <div>
-        {blogRecords}
-    </div>
+        <div className="blog-container">
+            <div className="content-container">{blogRecords}</div>
+        </div>
     )}
 }
