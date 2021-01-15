@@ -1,0 +1,10 @@
+.DraftEditor-root {
+    border: 1px solid #f1f1f1;
+    padding: 20px;
+    border-radius: 3px;
+  }
+
+  .one-column-blog-form {
+    @include base-grid();
+    grid-template-columns: 200px;
+  }

@@ -137,7 +137,7 @@ export default class BlogForm extends Component {
                         <RichTextEditor handleRichTextEditorChange={this.handleRichTextEditorChange} />
                     </div>
 
-                    <div className="one-column">
+                    <div className="one-column-blog-form">
                         <DropzoneComponent 
                         ref={this.featuredImageRef}
                         config={this.componentConfig()}
