@@ -16,6 +16,8 @@ export default class BlogForm extends Component {
             content: "",
             featured_image: ""
         }
+
+        this.featuredImageRef = React.createRef();
     }
 
     componentConfig = () => {
@@ -50,7 +52,13 @@ export default class BlogForm extends Component {
         formData.append("portfolio_blog[status]", this.state.status)
         formData.append("portfolio_blog[content]", this.state.content)
 
+        if(this.state.featured_image){
+            formData.append("portfolio_blog[featured_image]", this.state.featured_image) 
+        }
+
         return formData
+
+
     }
 
     handleChange = (event) => {
@@ -72,6 +80,37 @@ export default class BlogForm extends Component {
         event.preventDefault()
 
     }
+
+    handleSubmit(event) {
+        axios
+          .post(
+            "https://jordan.devcamp.space/portfolio/portfolio_blogs",
+            this.buildForm(),
+            { withCredentials: true }
+          )
+          .then(response => {
+            if (this.state.featured_image) {
+              this.featuredImageRef.current.dropzone.removeAllFiles();
+            }
+    
+            this.setState({
+              title: "",
+              blog_status: "",
+              content: "",
+              featured_image: ""
+            });
+    
+            this.props.handleSuccessfullFormSubmission(
+              response.data.portfolio_blog
+            );
+          })
+          .catch(error => {
+            console.log("handleSubmit for blog error", error);
+          });
+    
+        event.preventDefault();
+      }
+    
 
     render(){
         return (
@@ -100,6 +139,7 @@ export default class BlogForm extends Component {
 
                     <div className="one-column">
                         <DropzoneComponent 
+                        ref={this.featuredImageRef}
                         config={this.componentConfig()}
                         djsConfig={this.djsConfig()}
                         eventHandlers={this.handleFeaturedImageDrop()}
