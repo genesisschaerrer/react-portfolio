@@ -20,9 +20,20 @@ export default class RichTextEditor extends Component {
             )
         )
     }
+    //READER IS A PROMISE 
+    //READER AS RESULT TAKES THE IMAGE AND RETURNS A STRING VERSION IT RETURNS A 
+    //RESULT THAT WE CALL IN THE CALLBACK FUNCTION
+    getBase64 = (file, callback) => {
+        let reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => callback(reader.result)
+        reader.onerror = error => {}
+    }
 
-    uploadFile(file){
-        console.log("upload file, ", file)
+    uploadFile = (file) => {
+        return new Promise((resolve, reject) => {
+            this.getBase64(file, data => resolve({data: {link: data}}))
+        })
     }
 
     render(){
