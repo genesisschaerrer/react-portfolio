@@ -16,9 +16,25 @@ export default class BlogDetail extends Component {
       }
     }
 
-    hadleEditClick = () => {
-      console.log("handle edit clicked")
-      this.setState({editMode: true})
+    handleUpdateFormSubmission = (blog) => {
+      this.setState({
+        blogItem: blog,
+        editMode: false
+      })
+    }
+
+    handleFeaturedImageDelete = () => {
+      this.setState({
+        blogItem: {
+          featured_image_url: ""
+        }
+      })
+    }
+
+    handleEditClick = () => {
+      if(this.props.loggedInStatus === "LOGGED_IN"){
+        this.setState({editMode: true})
+      }
     }
 
     getBlogItem = () => {
@@ -47,12 +63,17 @@ export default class BlogDetail extends Component {
 
       const contentManager = () => {
         if(this.state.editMode){
-          return(<BlogForm editMode={this.state.editMode} blog={this.state.blogItem}/> )
+          return(<BlogForm 
+            editMode={this.state.editMode} 
+            blog={this.state.blogItem} 
+            handleFeaturedImageDelete={this.handleFeaturedImageDelete} 
+            handleUpdateFormSubmission={this.handleUpdateFormSubmission}
+            /> )
         } else {
           return(
             <div className="content-container">
               
-              <h1 onClick={this.hadleEditClick}>{title}</h1>
+              <h1 onClick={this.handleEditClick}>{title}</h1>
 
               <BlogFeaturedImage img={featured_image_url} />
 

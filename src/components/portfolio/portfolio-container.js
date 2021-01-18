@@ -19,32 +19,36 @@ export default class PorfolioContainer extends Component{
     }
 
     handleFilter (filter) {
-        this.setState({
-            data: this.state.data.filter(i => {
-                return i.category === filter
-            })
-        })
+        if(filter === "CLEAR_FILTERS"){
+            this.getPortoflioItems()
+        } else {
+            this.getPortoflioItems(filter)
+        }
     }
 
-    getPortoflioItems = () => {
+    getPortoflioItems = (filter = null) => {
         const axios = require('axios');
     
         // Make a request for a user with a given ID
         axios.get('https://genesisschaerrer.devcamp.space/portfolio/portfolio_items')
         .then(response => {
         // handle success
-        this.setState({
-            data: response.data.portfolio_items
-        })
+        if(filter){
+            this.setState({
+                data: response.data.portfolio_items.filter(i => {
+                    return i.category === filter
+                })
+            })
+        } else {
+            this.setState({
+                data: response.data.portfolio_items
+            })
+            }
         })
         .catch(error => {
         // handle error
         console.log(error);
         })
-        .then(() => {
-        // always executed
-        console.log('default function')
-        });
       }
 
     PortfolioItems() {
@@ -79,12 +83,17 @@ export default class PorfolioContainer extends Component{
         }
 
         return (          
-            <div className="portfolio-items-wrapper">
-                <button className="btn" onClick={()=> this.handleFilter('Education')}>Education</button> 
-                <button className="btn" onClick={()=> this.handleFilter('Higher Education')}>Higher Education</button>  
-                <button className="btn" onClick={()=> this.handleFilter('Digital Marketing')}>Digital Marketing</button> 
-                {this.PortfolioItems()}  
-            </div>    
+            <div className="homepage-wrapper">
+                <div className="filter-links">
+                    <button className="btn" onClick={()=> this.handleFilter('Education')}>Education</button> 
+                    <button className="btn" onClick={()=> this.handleFilter('Higher Education')}>Higher Education</button>  
+                    <button className="btn" onClick={()=> this.handleFilter('Digital Marketing')}>Digital Marketing</button> 
+                    <button className="btn" onClick={()=> this.handleFilter('CLEAR_FILTERS')}>All</button> 
+                </div>
+                 <div className="portfolio-items-wrapper">
+                    {this.PortfolioItems()}  
+                </div> 
+            </div>
             )
     }
 }

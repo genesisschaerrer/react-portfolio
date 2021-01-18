@@ -1,5 +1,5 @@
 import React, {Component} from "react"
-import { EditorState, convertToRaw } from 'draft-js'
+import { EditorState, convertToRaw, ContentState } from 'draft-js'
 import { Editor } from "react-draft-wysiwyg"
 import draftToHtml from "draftjs-to-html"
 import htmlToDraft from "html-to-draftjs"
@@ -9,14 +9,27 @@ export default class RichTextEditor extends Component {
         super(props)
 
         this.state = {
-            editorSate: EditorState.createEmpty()
+            editorState: EditorState.createEmpty()
         }
     }
 
-    onEditorStateChange = (editorSate) => {
-        this.setState({editorSate},
+    componentDidMount() {
+        if (this.props.editMode && this.props.contentToEdit) {
+          const blocksFromHtml = htmlToDraft(this.props.contentToEdit);
+          const { contentBlocks, entityMap } = blocksFromHtml;
+          const contentState = ContentState.createFromBlockArray(
+            contentBlocks,
+            entityMap
+          );
+          const editorState = EditorState.createWithContent(contentState);
+          this.setState({ editorState });
+        }
+      }
+
+    onEditorStateChange = (editorState) => {
+        this.setState({editorState},
             this.props.handleRichTextEditorChange(
-                draftToHtml(convertToRaw(this.state.editorSate.getCurrentContent()))
+                draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
             )
         )
     }
@@ -39,7 +52,7 @@ export default class RichTextEditor extends Component {
     render(){
         return(
             <div>
-                <Editor editorSate={this.state.editorSate}  
+                <Editor editorState={this.state.editorState}  
                 wrapperClassName="demo-wrapper" 
                 editorClassName="demo-editor"
                 onEditorStateChange={this.onEditorStateChange}

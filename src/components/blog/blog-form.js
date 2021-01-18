@@ -15,21 +15,37 @@ export default class BlogForm extends Component {
             title: "", 
             blog_status: "",
             content: "",
-            featured_image: ""
+            featured_image: "",
+            apiUrl: "https://genesisschaerrer.devcamp.space/portfolio/portfolio_blogs",
+            apiAction: "post",
         }
 
         this.featuredImageRef = React.createRef();
     }
 
-    componentDidMount(){
-        if(this.props.editMode){
-            this.setState({
-                id: this.props.blog.id,
-                title: this.props.blog.title,
-                status: this.props.blog.status
-            })
-        }
+    deleteImage = (imageType) => {
+        axios.delete(`https://api.devcamp.space/portfolio/delete-portfolio-blog-image/${this.props.blog.id}?image_type=${imageType}`, 
+        {withCredentials: true})
+        .then(response => {
+            this.props.handleFeaturedImageDelete()
+        })
+        .catch(error => {
+            console.log("deleteImage error ", error)
+        })
     }
+
+    componentDidMount() {
+        if (this.props.editMode) {
+          this.setState({
+            id: this.props.blog.id,
+            title: this.props.blog.title,
+            blog_status: this.props.blog.blog_status,
+            content: this.props.blog.content,
+            apiUrl: `https://genesisschaerrer.devcamp.space/portfolio/portfolio_blogs/${this.props.blog.id}`,
+            apiAction: "patch"
+          });
+        }
+      }
 
     componentConfig = () => {
         return {
@@ -79,10 +95,18 @@ export default class BlogForm extends Component {
     }
 
     handleSubmit = (event) => {
-        axios
-        .post('https://genesisschaerrer.devcamp.space/portfolio/portfolio_blogs', this.buildForm(), {withCredentials: true})
+        axios({
+            method: this.state.apiAction,
+            url: this.state.apiUrl,
+            data: this.buildForm(),
+            withCredentials: true
+        })
         .then(response => {
-            this.props.handleSuccessfullFormSubmission(response.data.portfolio_blog)
+            if(this.props.editMode){
+                this.props.handleUpdateFormSubmission(response.data.portfolio_blog)
+            } else {
+                this.props.handleSuccessfullFormSubmission(response.data.portfolio_blog)
+            }
 
         }).catch(error => {
             console.log("handleSubmit for blogg error: ", error)
@@ -145,10 +169,26 @@ export default class BlogForm extends Component {
                  </div>
 
                     <div className="one-column">
-                        <RichTextEditor handleRichTextEditorChange={this.handleRichTextEditorChange} />
+                        <RichTextEditor handleRichTextEditorChange={this.handleRichTextEditorChange}
+                        editMode={this.props.editMode}
+                        contentToEdit={this.props.editMode && this.props.blog.content ? 
+                        this.props.blog.content
+                        : null}
+                        />
                     </div>
 
                     <div className="one-column-blog-form">
+                        {this.props.editMode && this.props.blog.featured_image_url ?
+
+                         <div className="portfolio-manager-image-wrapper">
+                         <img src={this.props.blog.featured_image_url}/>
+
+                         <div className="image-removal-link">
+                             <a onClick={() => this.deleteImage("featured_image")}>Remove Image</a>
+                         </div>
+
+                         </div>
+                         :
                         <DropzoneComponent 
                         ref={this.featuredImageRef}
                         config={this.componentConfig()}
@@ -156,7 +196,7 @@ export default class BlogForm extends Component {
                         eventHandlers={this.handleFeaturedImageDrop()}
                         >
                             <div className="dz-message">Featured Image</div>
-                        </DropzoneComponent>
+                        </DropzoneComponent>}
                     </div>
 
                 <button className="btn">Save</button>
