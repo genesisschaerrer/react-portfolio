@@ -14,7 +14,7 @@ export default class PortfolioForm extends Component {
         this.state = {
             name: "",
             description: "",
-            category: "eCommerce",
+            category: "React",
             position: "",
             url: "",
             thumb_image: "",
@@ -50,7 +50,7 @@ export default class PortfolioForm extends Component {
                 id: id,
                 name: name || "",
                 description: description || "",
-                category: category || "eCommerce",
+                category: category || "React",
                 position: position || "",
                 url: url || "",
                 editMode: true,
