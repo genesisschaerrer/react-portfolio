@@ -215,9 +215,9 @@ export default class PortfolioForm extends Component {
                         value={this.state.category}
                         onChange={this.handleChange}
                         >
-                            <option value="eCommerce">eCommerce</option>
-                            <option value="Scheduling">Scheduling</option>
-                            <option value="Enterprise">Enterprise</option>
+                            <option value="React">React</option>
+                            <option value="Python">Python</option>
+                            <option value="Design">Design</option>
                         </select>
 
                     </div>
@@ -274,7 +274,7 @@ export default class PortfolioForm extends Component {
 
                             {this.state.logo_url && this.state.editMode ? 
                             (<div className="portfolio-manager-image-wrapper">
-                                <img src={this.state.logo_logo}/>
+                                <img src={this.state.logo_url}/>
 
                                 <div className="image-removal-link">
                                     <a onClick={() => this.deleteImage("logo_image")}>Remove Image</a>

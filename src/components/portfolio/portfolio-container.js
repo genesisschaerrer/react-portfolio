@@ -85,9 +85,9 @@ export default class PorfolioContainer extends Component{
         return (          
             <div className="homepage-wrapper">
                 <div className="filter-links">
-                    <button className="btn" onClick={()=> this.handleFilter('Education')}>Education</button> 
-                    <button className="btn" onClick={()=> this.handleFilter('Higher Education')}>Higher Education</button>  
-                    <button className="btn" onClick={()=> this.handleFilter('Digital Marketing')}>Digital Marketing</button> 
+                    <button className="btn" onClick={()=> this.handleFilter('React')}>React</button> 
+                    <button className="btn" onClick={()=> this.handleFilter('Python')}>Python</button>  
+                    <button className="btn" onClick={()=> this.handleFilter('Design')}>Design</button> 
                     <button className="btn" onClick={()=> this.handleFilter('CLEAR_FILTERS')}>All</button> 
                 </div>
                  <div className="portfolio-items-wrapper">
